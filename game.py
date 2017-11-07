@@ -2,10 +2,10 @@ import pygame, sys
 from random import randint
 from pygame.locals import *
 
-NUME = 1
-SPEED = 10
+NUME = 3
+SPEED = 1
 
-EINC = 5
+EINC = 3
 SINC = 1
 
 RED = (255, 0, 0)
@@ -16,57 +16,64 @@ WHITE = (255, 255, 255)
 W, H = 800, 600 
 SIZE = (W, H)
 
-PSIZE = 15
+PSIZE = 8
+ESIZE = 3
 
-player = [pygame.Rect(15, 15, PSIZE, PSIZE), [0, 0]]
+player = [[15, 65], [0, 0]]
+
+score = 0
 
 def createEnemys():
 	ret = []
 
 	for x in range(NUME):
-		ret.append((randint(20, W - 45), randint(20, H - 45))) 
+		ret.append((randint(20, W - 45), randint(70, H - 45))) 
 
 	return ret
 
 def printObjs():
 	DISPLAYSURF.fill(WHITE)
-
-	pygame.draw.rect(DISPLAYSURF, BLUE, player[0])
+	pygame.draw.circle(DISPLAYSURF, BLUE, player[0], PSIZE, 0)
 	DISPLAYSURF.blit(start_img, (W - 40, H - 40))
 
 	for x in range(NUME):
-		pygame.draw.circle(DISPLAYSURF, RED, enemys[x], 5, 0)
+		pygame.draw.circle(DISPLAYSURF, RED, enemys[x], ESIZE, 0)
+
+	textsurface = myfont.render("Score: " + str(score), False, (0, 0, 0))
+	DISPLAYSURF.blit(textsurface, (10, 10))
 
 def moveObjs():
 	movePlyr()
 
 def movePlyr():
-	player[0].left += player[1][0] 
-	player[0].top += player[1][1]
+	player[0][0] += player[1][0] 
+	player[0][1] += player[1][1]
 
-	if player[0].left < 0:
-		player[0].left = 0
+	if player[0][0] < PSIZE:
+		player[0][0] = PSIZE
 		player[1][0] = -player[1][0]
-	if player[0].left > W - PSIZE:
-		player[0].left = W - PSIZE
+	if player[0][0] > W - PSIZE:
+		player[0][0] = W - PSIZE
 		player[1][0] = -player[1][0]
 
-	if player[0].top < 0:
-		player[0].top = 0
+	if player[0][1] < PSIZE:
+		player[0][1] = PSIZE
 		player[1][1] = -player[1][1]
-	if player[0].top > H - PSIZE:
-		player[0].top = H - PSIZE
+	if player[0][1] > H - PSIZE:
+		player[0][1] = H - PSIZE
 		player[1][1] = -player[1][1]
 
 pygame.init()
+pygame.font.init()
+myfont = pygame.font.SysFont('Impact', 30)
 
 FPS = 60
 fpsClock = pygame.time.Clock()
 
 DISPLAYSURF = pygame.display.set_mode(SIZE, 0, 32)
-pygame.display.set_caption('DLBs')
+pygame.display.set_caption('No Buraco')
 
-start_img = pygame.image.load('hole.png')
+start_img = pygame.image.load('hole.jpg')
 
 enemys = createEnemys()
 
