@@ -66,7 +66,7 @@ fpsClock = pygame.time.Clock()
 DISPLAYSURF = pygame.display.set_mode(SIZE, 0, 32)
 pygame.display.set_caption('DLBs')
 
-start_img = pygame.image.load('start.png')
+start_img = pygame.image.load('hole.png')
 
 enemys = createEnemys()
 
