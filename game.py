@@ -1,3 +1,4 @@
+import math
 import pygame, sys
 from random import randint
 from pygame.locals import *
@@ -23,6 +24,10 @@ player = [[15, 65], [0, 0]]
 
 score = 0
 
+win_pos = (W - 40, H - 40)
+
+life = 3
+
 def createEnemys():
 	ret = []
 
@@ -34,16 +39,13 @@ def createEnemys():
 def printObjs():
 	DISPLAYSURF.fill(WHITE)
 	pygame.draw.circle(DISPLAYSURF, BLUE, player[0], PSIZE, 0)
-	DISPLAYSURF.blit(start_img, (W - 40, H - 40))
+	DISPLAYSURF.blit(win_img, win_pos)
 
 	for x in range(NUME):
 		pygame.draw.circle(DISPLAYSURF, RED, enemys[x], ESIZE, 0)
 
-	textsurface = myfont.render("Score: " + str(score), False, (0, 0, 0))
+	textsurface = myfont.render("Score: " + str(score) + " Vidas: " + str(life), False, (0, 0, 0))
 	DISPLAYSURF.blit(textsurface, (10, 10))
-
-def moveObjs():
-	movePlyr()
 
 def movePlyr():
 	player[0][0] += player[1][0] 
@@ -63,6 +65,20 @@ def movePlyr():
 		player[0][1] = H - PSIZE
 		player[1][1] = -player[1][1]
 
+def distance(a, b):
+	return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) 
+
+def win():
+	return distance(player[0], win_pos) < 21 + PSIZE
+
+def lost():
+	for x in range(NUME):
+		if distance(player[0], enemys[x]) < PSIZE + ESIZE:
+			return True
+
+	return False
+
+
 pygame.init()
 pygame.font.init()
 myfont = pygame.font.SysFont('Impact', 30)
@@ -71,9 +87,9 @@ FPS = 60
 fpsClock = pygame.time.Clock()
 
 DISPLAYSURF = pygame.display.set_mode(SIZE, 0, 32)
-pygame.display.set_caption('No Buraco')
+pygame.display.set_caption('Bola No Buraco')
 
-start_img = pygame.image.load('hole.jpg')
+win_img = pygame.image.load('hole.jpg')
 
 enemys = createEnemys()
 
@@ -95,7 +111,27 @@ while True:
 	if pressed[pygame.K_d]:
 		player[1][0] = SPEED 
 
-	moveObjs()
+	movePlyr()
+
+	if win():
+		score += 1
+		player[0] = [15, 65]
+		SPEED += SINC
+		NUME += EINC
+		enemys = createEnemys()
+
+	if lost():
+		player[0] = [15, 65]
+		life -= 1
+
+	if life == 0:
+		score = 0
+		player[0] = [15, 65]
+		SPEED = 1
+		NUME = 3
+		life = 3
+		player[1] = [0, 0]
+
 	printObjs()
 
 	pygame.display.update()
