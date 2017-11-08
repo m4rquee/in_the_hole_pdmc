@@ -9,6 +9,9 @@ SPEED = 1
 EINC = 3
 SINC = 1
 
+EMAX = 15
+SMAX = 10
+
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
@@ -115,8 +118,8 @@ while True:
 	if win():
 		score += 1
 		player[0] = [15, 65]
-		SPEED += SINC
-		NUME += EINC
+		SPEED = SPEED + SINC if SPEED + SINC <= SMAX else SMAX
+		NUME = NUME + EINC if NUME + EINC <= EMAX else EMAX
 		enemys = createEnemys()
 		player[1] = [0, 0]
 
