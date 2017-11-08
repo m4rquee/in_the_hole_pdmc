@@ -18,13 +18,13 @@ W, H = 800, 600
 SIZE = (W, H)
 
 PSIZE = 8
-ESIZE = 3
+ESIZE = 2
 
 player = [[15, 65], [0, 0]]
 
 score = 0
 
-win_pos = (W - 40, H - 40)
+win_pos = (W - 200, H - 200)
 
 life = 3
 
@@ -32,7 +32,7 @@ def createEnemys():
 	ret = []
 
 	for x in range(NUME):
-		ret.append((randint(20, W - 45), randint(70, H - 45))) 
+		ret.append((randint(25, W - 45), randint(75, H - 45))) 
 
 	return ret
 
@@ -69,7 +69,7 @@ def distance(a, b):
 	return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) 
 
 def win():
-	return distance(player[0], win_pos) < 21 + PSIZE
+	return distance(player[0], win_pos) < 25 + PSIZE
 
 def lost():
 	for x in range(NUME):
@@ -77,7 +77,6 @@ def lost():
 			return True
 
 	return False
-
 
 pygame.init()
 pygame.font.init()
@@ -101,14 +100,14 @@ while True:
 		        
 	pressed = pygame.key.get_pressed()
 
-	if pressed[pygame.K_w]:
+	if pressed[pygame.K_w] or pressed[pygame.K_UP]:
 		player[1][1] = -SPEED
-	if pressed[pygame.K_s]:
+	if pressed[pygame.K_s] or pressed[pygame.K_DOWN]:
 		player[1][1] = SPEED
 
-	if pressed[pygame.K_a]:
+	if pressed[pygame.K_a] or pressed[pygame.K_LEFT]:
 		player[1][0] = -SPEED 
-	if pressed[pygame.K_d]:
+	if pressed[pygame.K_d] or pressed[pygame.K_RIGHT]:
 		player[1][0] = SPEED 
 
 	movePlyr()
@@ -119,10 +118,12 @@ while True:
 		SPEED += SINC
 		NUME += EINC
 		enemys = createEnemys()
+		player[1] = [0, 0]
 
 	if lost():
 		player[0] = [15, 65]
 		life -= 1
+		player[1] = [0, 0]
 
 	if life == 0:
 		score = 0
