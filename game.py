@@ -4,13 +4,15 @@ from random import randint
 from pygame.locals import *
 
 NUME = 3
-SPEED = 1
+SPEED = 5
 
 EINC = 3
 SINC = 1
 
-EMAX = 15
-SMAX = 10
+EMAX = 45
+SMAX = 50
+
+LIFEINC = 1
 
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
@@ -27,15 +29,15 @@ player = [[15, 65], [0, 0]]
 
 score = 0
 
-win_pos = (W - 200, H - 200)
+win_pos = (W // 2, H // 2)
 
-life = 3
+life = 5
 
 def createEnemys():
 	ret = []
 
 	for x in range(NUME):
-		ret.append((randint(25, W - 45), randint(75, H - 45))) 
+		ret.append((randint(25, W), randint(75, H))) 
 
 	return ret
 
@@ -72,7 +74,7 @@ def distance(a, b):
 	return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) 
 
 def win():
-	return distance(player[0], win_pos) < 25 + PSIZE
+	return distance(player[0], win_pos) < 30 + PSIZE
 
 def lost():
 	for x in range(NUME):
@@ -122,6 +124,7 @@ while True:
 		NUME = NUME + EINC if NUME + EINC <= EMAX else EMAX
 		enemys = createEnemys()
 		player[1] = [0, 0]
+		life += LIFEINC
 
 	if lost():
 		player[0] = [15, 65]
