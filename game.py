@@ -44,10 +44,11 @@ def createEnemys():
 def printObjs():
 	DISPLAYSURF.fill(WHITE)
 	pygame.draw.circle(DISPLAYSURF, BLUE, player[0], PSIZE, 0)
-	DISPLAYSURF.blit(win_img, win_pos)
 
 	for x in range(NUME):
 		pygame.draw.circle(DISPLAYSURF, RED, enemys[x], ESIZE, 0)
+
+	DISPLAYSURF.blit(win_img, win_pos)
 
 	textsurface = myfont.render("Score: " + str(score) + " Vidas: " + str(life), False, (0, 0, 0))
 	DISPLAYSURF.blit(textsurface, (10, 10))
